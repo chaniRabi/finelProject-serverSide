@@ -1,0 +1,3 @@
+
+//פקודת scaffold
+Scaffold-DbContext "Server=MC-BJFUI18K5Y9V;Database=SHINESTOCK;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models

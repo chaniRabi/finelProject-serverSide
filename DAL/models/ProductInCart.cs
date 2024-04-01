@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DAL.Models;
 
-public partial class Bug
+public partial class ProductInCart
 {
     public int Id { get; set; }
 
@@ -14,4 +14,6 @@ public partial class Bug
     public int ProductId { get; set; }
 
     public virtual User Customer { get; set; } = null!;
+
+    public virtual Product Product { get; set; } = null!;
 }

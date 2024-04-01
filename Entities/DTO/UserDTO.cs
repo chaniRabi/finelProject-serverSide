@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DAL.Models;
+namespace Entities.DTO;
 
-public partial class User
+public partial class UserDTO
 {
     public int Id { get; set; }
 
@@ -19,5 +19,4 @@ public partial class User
 
     public string? Address { get; set; }
 
-    public virtual ICollection<ProductInCart> ProductInCarts { get; set; } = new List<ProductInCart>();
 }

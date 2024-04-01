@@ -15,8 +15,6 @@ public partial class ShinestockContext : DbContext
     {
     }
 
-    public virtual DbSet<Bug> Bugs { get; set; }
-
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Contct> Contcts { get; set; }
@@ -27,51 +25,32 @@ public partial class ShinestockContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductInCart> ProductInCarts { get; set; }
+
     public virtual DbSet<Status> Statuses { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=MC-BJFUI18K5Y9V;Database=SHINESTOCK;Trusted_Connection=True; TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=MC-BJFUI18K5Y9V;Database=SHINESTOCK;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Bug>(entity =>
-        {
-            entity.ToTable("BUG");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
-            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-            entity.Property(e => e.ProductId).HasColumnName("ProductID");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Bugs)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BUG__CustomerID__4CA06362");
-        });
-
         modelBuilder.Entity<Category>(entity =>
         {
             entity.ToTable("CATEGORIES");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
-            entity.Property(e => e.NameCategor)
-                .HasMaxLength(200)
-                .IsFixedLength();
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.NameCategor).HasMaxLength(200);
+            entity.Property(e => e.PathToImage).HasMaxLength(200);
         });
 
         modelBuilder.Entity<Contct>(entity =>
         {
             entity.ToTable("CONTCTS");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Phone)
                 .HasMaxLength(10)
@@ -82,9 +61,7 @@ public partial class ShinestockContext : DbContext
         {
             entity.ToTable("ORDERS");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
@@ -93,9 +70,7 @@ public partial class ShinestockContext : DbContext
         {
             entity.ToTable("ORDERS_PRODUCTS");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -114,9 +89,7 @@ public partial class ShinestockContext : DbContext
         {
             entity.ToTable("PRODUCTS");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
@@ -125,13 +98,32 @@ public partial class ShinestockContext : DbContext
                 .HasConstraintName("FK__PRODUCTS__Catego__5CD6CB2B");
         });
 
+        modelBuilder.Entity<ProductInCart>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_BUG");
+
+            entity.ToTable("ProductInCart");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.ProductInCarts)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__BAG__CustomerID__6A30C649");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductInCarts)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__BAG__ProductID__693CA210");
+        });
+
         modelBuilder.Entity<Status>(entity =>
         {
             entity.ToTable("STATUS");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Description)
                 .HasMaxLength(50)
                 .IsFixedLength();
