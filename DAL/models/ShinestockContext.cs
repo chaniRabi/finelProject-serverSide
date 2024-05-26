@@ -135,6 +135,8 @@ public partial class ShinestockContext : DbContext
 
             entity.ToTable("USERS");
 
+            entity.HasIndex(e => new { e.Email, e.Password }, "UQ_USERS_EMAIL_PASSWORD").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Address).HasColumnName("ADDRESS");
             entity.Property(e => e.Email)

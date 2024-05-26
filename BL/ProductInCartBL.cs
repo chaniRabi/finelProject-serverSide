@@ -3,7 +3,6 @@ using DAL.Models;
 using Entities.DTO;
 using AutoMapper;
 
-
 namespace BL
 {
     public class ProductInCartBL : IProductInCartBL
@@ -18,9 +17,9 @@ namespace BL
 
         }
 
-        public async Task<List<Product>> GetProductsInCartByUserId()
+        public async Task<List<Product>> GetProductsInCartByUserId(int userId)
         {
-            List<Product> items = await _ProductInCartDL.GetProductsInCartByUserId();
+            List<Product> items = await _ProductInCartDL.GetProductsInCartByUserId(userId);
             return items;
         }
         public async Task<ProductInCart> GetCartById(int id)
@@ -51,7 +50,5 @@ namespace BL
             return productInCartDTO;
 
         }
-
     }
 }
-

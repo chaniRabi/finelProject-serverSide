@@ -30,7 +30,10 @@ namespace BL
             Product currentProduct = await _productDL.GetProductById(id);
             return currentProduct;
         }
-
+        public async Task<List<Product>> GetProductsByCategoryId(int categoryId)
+        {
+            return await _productDL.GetProductsByCategoryId(categoryId);
+        }
         public async Task<ProductDTO> AddProduct(ProductDTO product)
         {
             Product u = _mapper.Map<Product>(product);

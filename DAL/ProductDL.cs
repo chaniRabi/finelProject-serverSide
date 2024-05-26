@@ -26,6 +26,14 @@ namespace DAL
             return null;
         }
 
+        public async Task<List<Product>> GetProductsByCategoryId(int categoryId)
+        {
+        return await _context.Products
+                             .Where(p => p.CategoryId == categoryId)
+                             .ToListAsync();
+
+        }
+       
         public async Task<Product> AddProduct(Product product)
         {
             try
@@ -64,7 +72,7 @@ namespace DAL
                 if (current != null)
                 {
                     current.Name = product.Name;
-                    current.Prise = product.Prise;
+                    current.Price = product.Price;
                     current.Category = product.Category;
 
                     _context.Products.Update(current);

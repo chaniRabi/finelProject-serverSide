@@ -13,7 +13,7 @@ namespace DAL
             _context = context;
         }
 
-        public async Task<List<Product>> GetProductsInCartByUserId()
+        public async Task<List<Product>> GetProductsInCartByUserId(int userId)
         {
             List<Product> inBug = await _context.Products.ToListAsync();
             return inBug;

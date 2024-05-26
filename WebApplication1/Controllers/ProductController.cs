@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DAL.Models;
-using Microsoft.AspNetCore.Mvc;
 using BL;
 using DAL;
 using Entities.DTO;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,10 +23,37 @@ namespace API_ShineStock.Controllers
         }
         [HttpGet]
         [Route("getProduct")]
-        public async Task<List<Product>> GetProduct()
+        //public async Task<List<Product>> GetProduct()
+        //{
+
+        //    var Product = await _productBL.GetProduct();
+        //    return Product;
+        //}
+        public async Task<IActionResult> GetProducts([FromQuery] int page = 1, [FromQuery] string categoryCode = "")
         {
-            var Product = await _productBL.GetProduct();
-            return Product;
+            int productsPerPage = 10;
+
+            var query = _productBL.GetProduct.AsQueryable();
+
+            // סינון לפי קוד מחלקה אם נשלח בפרמטרים
+            if (!string.IsNullOrEmpty(categoryCode))
+            {
+                query = query.Where(p => p.CategoryCode == categoryCode);
+            }
+
+            var totalItems = await query.CountAsync();
+            var paginatedProducts = await query
+                .Skip((page - 1) * productsPerPage)
+                .Take(productsPerPage)
+                .ToListAsync();
+
+            var response = new
+            {
+                Products = paginatedProducts,
+                TotalPages = (int)System.Math.Ceiling(totalItems / (double)productsPerPage)
+            };
+
+            return Ok(response);
         }
 
         [HttpGet]
@@ -35,6 +64,7 @@ namespace API_ShineStock.Controllers
             return currentProduct;
         }
 
+      
         [HttpPost]
         public async Task<ActionResult<ProductDTO>> AddProduct([FromBody] ProductDTO product)
         {
