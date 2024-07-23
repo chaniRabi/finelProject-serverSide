@@ -19,6 +19,14 @@ namespace DAL
             return products;
         }
 
+        //public async Task<List<Product>> GetProducts(int categoryId)
+        //{
+
+        //    return await _context.Products
+        //                     .Where(p => p.CategoryId == categoryId)
+        //                     .ToListAsync();
+        //}
+
         public async Task<Product> GetProductById(int id)
         {
             Product product = await _context.Products.FindAsync(id);
@@ -28,12 +36,12 @@ namespace DAL
 
         public async Task<List<Product>> GetProductsByCategoryId(int categoryId)
         {
-        return await _context.Products
-                             .Where(p => p.CategoryId == categoryId)
-                             .ToListAsync();
+            return await _context.Products
+                                 .Where(p => p.CategoryId == categoryId)
+                                 .ToListAsync();
 
         }
-       
+
         public async Task<Product> AddProduct(Product product)
         {
             try

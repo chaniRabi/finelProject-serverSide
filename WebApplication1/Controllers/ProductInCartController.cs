@@ -3,6 +3,7 @@ using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using Entities.DTO;
 using System.Collections.Generic;
+using DAL;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API_ShineStock.Controllers
@@ -12,6 +13,7 @@ namespace API_ShineStock.Controllers
     public class ProductInCartController : ControllerBase
     {
         private IProductInCartBL _ProductInCartBL;
+        private object _ProductBL;
 
         public ProductInCartController(IProductInCartBL bagBL)
         {
@@ -19,11 +21,16 @@ namespace API_ShineStock.Controllers
         }
 
         //GET: api/<BagController>
-        [HttpGet("GetProductsInCartByUserId")]
+        [HttpGet("GetProductsInCartByUserId/{userId}")]
         public async Task<List<Product>> GetProductsInCartByUserId(int userId)
         {
-            var items = await _ProductInCartBL.GetProductsInCartByUserId(userId);
-            return items;
+            var products = await _ProductInCartBL.GetProductsInCartByUserId(userId);
+            //if (products == null)
+            //{
+            //    return NotFound();
+            //}
+
+            return products;
         }
 
         // GET api/<BagController>/5
@@ -83,6 +90,23 @@ namespace API_ShineStock.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+
+
         }
+
+        [HttpDelete("clearCart/{userId}")]
+        public async Task<ActionResult<bool>> ClearCart(int userId)
+        {
+            try
+            {
+                bool isCleared = await _ProductInCartBL.ClaerCart(userId);
+                return isCleared;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

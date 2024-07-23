@@ -22,39 +22,54 @@ namespace API_ShineStock.Controllers
             _productBL = productBL;
         }
         [HttpGet]
-        [Route("getProduct")]
-        //public async Task<List<Product>> GetProduct()
+        [Route("getProducts")]
+
+        public async Task<List<Product>> GetProducts()
+        {
+
+            var Product = await _productBL.GetProducts();
+
+            return Product;
+        }
+        //[HttpGet]
+        //[Route("getProducts")]
+        //public async Task<List<Product>> GetProducts(int categoryId)
         //{
 
-        //    var Product = await _productBL.GetProduct();
+        //    var Product = await _productBL.GetProduct(categoryId);
+
         //    return Product;
         //}
-        public async Task<IActionResult> GetProducts([FromQuery] int page = 1, [FromQuery] string categoryCode = "")
-        {
-            int productsPerPage = 10;
 
-            var query = _productBL.GetProduct.AsQueryable();
 
-            // סינון לפי קוד מחלקה אם נשלח בפרמטרים
-            if (!string.IsNullOrEmpty(categoryCode))
-            {
-                query = query.Where(p => p.CategoryCode == categoryCode);
-            }
 
-            var totalItems = await query.CountAsync();
-            var paginatedProducts = await query
-                .Skip((page - 1) * productsPerPage)
-                .Take(productsPerPage)
-                .ToListAsync();
+        //[HttpGet]
+        //public async Task<IActionResult> GetProducts([FromQuery] int page = 1, [FromQuery] string categoryCode = "")
+        //{
+        //    int productsPerPage = 10;
 
-            var response = new
-            {
-                Products = paginatedProducts,
-                TotalPages = (int)System.Math.Ceiling(totalItems / (double)productsPerPage)
-            };
+        //    var query = _productBL.GetProduct.AsQueryable();
 
-            return Ok(response);
-        }
+        //    // סינון לפי קוד מחלקה אם נשלח בפרמטרים
+        //    if (!string.IsNullOrEmpty(categoryCode))
+        //    {
+        //        query = query.Where(p => p.CategoryCode == categoryCode);
+        //    }
+
+        //    var totalItems = await query.CountAsync();
+        //    var paginatedProducts = await query
+        //        .Skip((page - 1) * productsPerPage)
+        //        .Take(productsPerPage)
+        //        .ToListAsync();
+
+        //    var response = new
+        //    {
+        //        Products = paginatedProducts,
+        //        TotalPages = (int)System.Math.Ceiling(totalItems / (double)productsPerPage)
+        //    };
+
+        //    return Ok(response);
+        //}
 
         [HttpGet]
         [Route("getProductById/{id}")]

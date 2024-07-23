@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
-    public class ProductInCartDL : IProductInCartDL
+    public class ProductInCartDL : IProductInCartDL1
     {
 
         private ShinestockContext _context;
@@ -13,10 +13,38 @@ namespace DAL
             _context = context;
         }
 
+        //public async Task<List<Product>> GetProductsInCartByUserId(int userId)
+        //{
+        //    var inBug = await _context.ProductInCarts.Where();//מחפש את המוצר שבעגלה ששייכת לאותו יוזר שקיבלתי
+
+        //    return inBug;
+        //}
+
+        //הפונקציה GetProductsInCartByUserId מטרתה להחזיר רשימה של מוצרים שנמצאים בעגלת הקניות של משתמש מסוים על פי ה-UserId.
         public async Task<List<Product>> GetProductsInCartByUserId(int userId)
         {
-            List<Product> inBug = await _context.Products.ToListAsync();
-            return inBug;
+            var products = await (from c in _context.ProductInCarts
+                                  join p in _context.Products on c.ProductId equals p.Id
+                                  where c.CustomerId == userId
+                                  select new Product
+                                  {
+                                      Id = p.Id,
+                                      Name = p.Name,
+                                      Price = p.Price,
+                                      CategoryId = p.CategoryId,
+                                      Image = p.Image,
+                                      Description = p.Description,
+                                      ProductInCarts = _context.ProductInCarts
+                                                            .Where(pc => pc.CustomerId == userId && pc.ProductId == p.Id)
+                                                            .Select(pc => new ProductInCart
+                                                            {
+                                                                Id = pc.Id,
+                                                                Amount = pc.Amount ?? 0
+                                                            })
+                                                            .ToList()
+                                  }).ToListAsync();
+
+            return products;
         }
 
         public async Task<ProductInCart> GetCartById(int id)
@@ -65,7 +93,7 @@ namespace DAL
         {
             try
             {
-                ProductInCart current = await _context.ProductInCarts.FirstOrDefaultAsync(item => item.Id == id);
+                ProductInCart current = await _context.ProductInCarts.FirstOrDefaultAsync(item => item.ProductId == id && item.CustomerId == bag.CustomerId);
                 if (current != null)
                 {
                     current.Amount = bag.Amount;
@@ -85,9 +113,27 @@ namespace DAL
             }
         }
 
+        public async Task<bool> ClearCart(int userId)
+        {
+            try
+            {
+                var itemsToRemove = await _context.ProductInCarts
+                                                 .Where(p => p.CustomerId == userId)
+                                                 .ToListAsync();
+
+                _context.ProductInCarts.RemoveRange(itemsToRemove);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
 
 
+        }
     }
-}
+    };
 
 

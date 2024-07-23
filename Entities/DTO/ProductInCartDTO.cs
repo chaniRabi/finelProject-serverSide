@@ -13,5 +13,5 @@ public partial class ProductInCartDTO
 
     public int ProductId { get; set; }
 
-    public virtual UserDTO Customer { get; set; } = null!;
+    //public virtual UserDTO Customer { get; set; } = null!;
 }

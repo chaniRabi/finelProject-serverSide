@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Entities.DTO;
@@ -14,5 +15,7 @@ public partial class OrderDTO
     public DateOnly? Date { get; set; }
 
     public int? StatusId { get; set; }
+
+    public virtual ICollection<OrdersProduct> OrdersProducts { get; set; } = new List<OrdersProduct>();
 
 }

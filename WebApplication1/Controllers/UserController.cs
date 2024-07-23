@@ -77,6 +77,7 @@ namespace API_ShineStock.Controllers
             try
             {
                 UserDTO isAddUser = await _userBL.AddUser(user);
+
                 return Ok(isAddUser);
             }
             catch (Exception ex)

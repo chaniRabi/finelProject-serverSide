@@ -30,7 +30,7 @@ builder.Services.AddScoped<ILookupDL, LookupDL>();
 builder.Services.AddScoped<IProductBL, ProductBL>();
 builder.Services.AddScoped<IProductDL, ProductDL>();
 builder.Services.AddScoped<IProductInCartBL, ProductInCartBL>();
-builder.Services.AddScoped<IProductInCartDL, ProductInCartDL>();
+builder.Services.AddScoped<IProductInCartDL1, ProductInCartDL>();
 builder.Services.AddScoped<IUserBL, UserBL>();
 builder.Services.AddScoped<IUserDL, UserDL>();
 

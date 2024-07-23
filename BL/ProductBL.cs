@@ -20,11 +20,17 @@ namespace BL
             _productDL = productDL;
             _mapper = mapper;
         }
-        public async Task<List<Product>> GetProduct()
+
+        public async Task<List<Product>> GetProducts()
         {
-            List<Product> users = await _productDL.GetProducts();
-            return users;
+            List<Product> products = await _productDL.GetProducts();
+            return products;
         }
+        //public async Task<List<Product>> GetProduct(int categoryId)
+        //{
+        //    List<Product> products = await _productDL.GetProducts(categoryId);
+        //    return products;
+        //}
         public async Task<Product> GetProductById(int id)
         {
             Product currentProduct = await _productDL.GetProductById(id);

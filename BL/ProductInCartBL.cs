@@ -7,10 +7,10 @@ namespace BL
 {
     public class ProductInCartBL : IProductInCartBL
     {
-        IProductInCartDL _ProductInCartDL;
+        IProductInCartDL1 _ProductInCartDL;
         IMapper _mapper;
 
-        public ProductInCartBL(IProductInCartDL bagDL, IMapper mapper)
+        public ProductInCartBL(IProductInCartDL1 bagDL, IMapper mapper)
         {
             _ProductInCartDL = bagDL;
             _mapper = mapper;
@@ -50,5 +50,20 @@ namespace BL
             return productInCartDTO;
 
         }
+
+        public async Task<bool> ClaerCart(int userId)
+        {
+            return await _ProductInCartDL.ClearCart(userId);
+        }
+
+        //public async Task<ProductInCartDTO> ClaerCart (ProductInCartDTO bag)
+        //{
+        //    try
+        //    {
+        //        await _ProductInCartDL.ClaerCartAsync();
+        //        return new ProductInCartDTO();
+        //    }
+        //    catch (Exception ex) { return; }
+        //}
     }
 }
