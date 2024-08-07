@@ -18,7 +18,7 @@ namespace DAL
 
         public async Task<List<Order>> GetOrders()
         {
-            List<Order> orders = await _context.Orders.ToListAsync();
+            List<Order> orders = await _context.Orders.Include(x => x.OrdersProducts).ThenInclude(y => y.Product).ToListAsync();
             return orders;
         }
 
@@ -34,15 +34,23 @@ namespace DAL
         {
             try
             {
+                var productInCarts = await _context.ProductInCarts.Where(x => x.CustomerId == order.UserId).ToListAsync();
+                //Add the order including related OrderProducts
                 await _context.Orders.AddAsync(order);
+                await _context.SaveChangesAsync(); // Save changes to generate the OrderId
+                
+                _context.ProductInCarts.RemoveRange(productInCarts);
                 await _context.SaveChangesAsync();
+
                 return order;
             }
             catch (Exception ex)
             {
-                throw ex;
+                // Log the exception or handle it as needed
+                throw new Exception("An error occurred while adding the order.", ex);
             }
         }
+
 
         public async Task<bool> RemoveOrder(int id)
         {

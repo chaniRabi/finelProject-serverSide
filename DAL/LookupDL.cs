@@ -15,6 +15,17 @@ namespace DAL
 
         public LookupDL(ShinestockContext context) { _context = context; }
 
+        public async Task<Contct> AddContct(Contct contct)
+        {
+            try
+            {
+                await _context.Contcts.AddAsync(contct);
+                await _context.SaveChangesAsync();
+                return contct;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
         public async Task<List<Contct>> GetContcts()
         {
             try

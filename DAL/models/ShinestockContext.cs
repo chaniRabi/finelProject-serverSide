@@ -64,6 +64,15 @@ public partial class ShinestockContext : DbContext
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.StatusId)
+                .HasConstraintName("FK_ORDERS_STATUS");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ORDERS_ORDERS");
         });
 
         modelBuilder.Entity<OrdersProduct>(entity =>
@@ -77,7 +86,7 @@ public partial class ShinestockContext : DbContext
             entity.HasOne(d => d.Order).WithMany(p => p.OrdersProducts)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ORDERS_PR__Order__5BE2A6F2");
+                .HasConstraintName("FK_ORDERS_PRODUCTS_ORDERS");
 
             entity.HasOne(d => d.Product).WithMany(p => p.OrdersProducts)
                 .HasForeignKey(d => d.ProductId)

@@ -11,7 +11,7 @@ public partial class OrdersProduct
 
     public int OrderId { get; set; }
 
-    public int? Amount { get; set; }
+    public int Amount { get; set; }
 
     public virtual Order Order { get; set; } = null!;
 

@@ -21,6 +21,14 @@ namespace BL
             _mapper = mapper;
         }
 
+        public async Task<ContctDTO> AddContct(ContctDTO contct)
+        {
+            Contct c = _mapper.Map<Contct>(contct);
+            Contct addContct = await _lookupDL.AddContct(c);
+            ContctDTO contctDTO = _mapper.Map<ContctDTO>(addContct);
+            return contctDTO;
+        }
+
         public async Task<List<ContctDTO>> GetContcts()
         {
             try { 

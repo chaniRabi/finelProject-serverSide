@@ -17,6 +17,8 @@ public partial class Product
 
     public string? Description { get; set; }
 
+    public int? Quantity { get; set; }
+
     public virtual Category Category { get; set; } = null!;
 
     public virtual ICollection<OrdersProduct> OrdersProducts { get; set; } = new List<OrdersProduct>();

@@ -16,4 +16,8 @@ public partial class Order
     public int? StatusId { get; set; }
 
     public virtual ICollection<OrdersProduct> OrdersProducts { get; set; } = new List<OrdersProduct>();
+
+    public virtual Status? Status { get; set; }
+
+    public virtual User User { get; set; } = null!;
 }

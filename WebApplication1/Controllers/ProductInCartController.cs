@@ -22,7 +22,7 @@ namespace API_ShineStock.Controllers
 
         //GET: api/<BagController>
         [HttpGet("GetProductsInCartByUserId/{userId}")]
-        public async Task<List<Product>> GetProductsInCartByUserId(int userId)
+        public async Task<List<ProductInCartDTO>> GetProductsInCartByUserId(int userId)
         {
             var products = await _ProductInCartBL.GetProductsInCartByUserId(userId);
             //if (products == null)
@@ -35,9 +35,9 @@ namespace API_ShineStock.Controllers
 
         // GET api/<BagController>/5
         [HttpGet("{id}")]
-        public async Task<ProductInCart> GetCartById(int id)
+        public async Task<ProductInCartDTO> GetCartById(int id)
         {
-            ProductInCart current = await _ProductInCartBL.GetCartById(id);
+            ProductInCartDTO current = await _ProductInCartBL.GetCartById(id);
             return current;
         }
 

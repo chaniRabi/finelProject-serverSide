@@ -16,6 +16,6 @@ public partial class OrderDTO
 
     public int? StatusId { get; set; }
 
-    public virtual ICollection<OrdersProduct> OrdersProducts { get; set; } = new List<OrdersProduct>();
+    public virtual ICollection<OrdersProductDTO>? OrdersProducts { get; set; } = new List<OrdersProductDTO>();
 
 }

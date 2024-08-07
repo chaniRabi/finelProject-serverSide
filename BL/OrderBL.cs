@@ -7,24 +7,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace BL
 {
     public class OrderBL : IOrderBL
     {
+        //קבלת תלות מהשכבות
         IOrderDL _orderDL;
         IMapper _mapper;
+        IProductDL _productDL;
 
-        public OrderBL(IOrderDL orderDL, IMapper mapper)
+        public OrderBL(IOrderDL orderDL, IMapper mapper, IProductDL productDL)
         {
             _orderDL = orderDL;
             _mapper = mapper;
+            _productDL = productDL;
+            
+
         }
 
-        public async Task<List<Order>> GetOrders()
+        public async Task<List<OrderDTO>> GetOrders()
         {
             List<Order> orders = await _orderDL.GetOrders();
-            return orders;
+            List<OrderDTO> orderDTO = _mapper.Map<List<OrderDTO>>(orders);
+            return orderDTO;
         }
         public async Task<Order> GetOrderById(int id)
         {
@@ -37,6 +44,7 @@ namespace BL
             Order u = _mapper.Map<Order>(order);
             Order isAdd = await _orderDL.AddOrder(u);
             OrderDTO orderDTO = _mapper.Map<OrderDTO>(isAdd);
+             await ProcessOrderAsync(order);
             return orderDTO;
         }
         public async Task<bool> RemoveOrder(int id)
@@ -54,6 +62,14 @@ namespace BL
 
             return orderDTO;
 
+        }
+
+        public async Task ProcessOrderAsync(OrderDTO order)
+        {
+            foreach (var item in order.OrdersProducts)
+            {
+                await _productDL.UpdateStock(item.ProductId, item.Amount);
+            }
         }
     }
 }

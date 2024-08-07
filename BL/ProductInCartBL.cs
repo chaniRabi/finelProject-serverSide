@@ -17,22 +17,24 @@ namespace BL
 
         }
 
-        public async Task<List<Product>> GetProductsInCartByUserId(int userId)
+        public async Task<List<ProductInCartDTO>> GetProductsInCartByUserId(int userId)
         {
-            List<Product> items = await _ProductInCartDL.GetProductsInCartByUserId(userId);
-            return items;
+            List<ProductInCart> items = await _ProductInCartDL.GetProductsInCartByUserId(userId);
+            List<ProductInCartDTO> productInCartDTO = _mapper.Map<List<ProductInCartDTO>>(items);
+            return productInCartDTO;
         }
-        public async Task<ProductInCart> GetCartById(int id)
+        public async Task<ProductInCartDTO> GetCartById(int id)
         {
             ProductInCart currentBag = await _ProductInCartDL.GetCartById(id);
-            return currentBag;
+            ProductInCartDTO productInCartDTO = _mapper.Map<ProductInCartDTO>(currentBag);
+            return productInCartDTO;
         }
 
         public async Task<ProductInCartDTO> AddProductToCart(ProductInCartDTO itemToBag)
         {
             ProductInCart u = _mapper.Map<ProductInCart>(itemToBag);
             ProductInCart isAdd = await _ProductInCartDL.AddProductToCart(u);
-            ProductInCartDTO productInCartDTO = _mapper.Map<ProductInCartDTO>(itemToBag);
+            ProductInCartDTO productInCartDTO = _mapper.Map<ProductInCartDTO>(isAdd);
             return productInCartDTO;
         }
         public async Task<bool> RemoveProductFromCart(int id)
@@ -46,7 +48,7 @@ namespace BL
         {
             ProductInCart u = _mapper.Map<ProductInCart>(bag);
             ProductInCart isUpdate = await _ProductInCartDL.UpdateCart(u, id);
-            ProductInCartDTO productInCartDTO = _mapper.Map<ProductInCartDTO>(bag);
+            ProductInCartDTO productInCartDTO = _mapper.Map<ProductInCartDTO>(isUpdate);
             return productInCartDTO;
 
         }

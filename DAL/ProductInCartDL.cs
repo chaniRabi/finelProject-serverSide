@@ -21,30 +21,38 @@ namespace DAL
         //}
 
         //הפונקציה GetProductsInCartByUserId מטרתה להחזיר רשימה של מוצרים שנמצאים בעגלת הקניות של משתמש מסוים על פי ה-UserId.
-        public async Task<List<Product>> GetProductsInCartByUserId(int userId)
+        public async Task<List<ProductInCart>> GetProductsInCartByUserId(int userId)
         {
-            var products = await (from c in _context.ProductInCarts
-                                  join p in _context.Products on c.ProductId equals p.Id
-                                  where c.CustomerId == userId
-                                  select new Product
-                                  {
-                                      Id = p.Id,
-                                      Name = p.Name,
-                                      Price = p.Price,
-                                      CategoryId = p.CategoryId,
-                                      Image = p.Image,
-                                      Description = p.Description,
-                                      ProductInCarts = _context.ProductInCarts
-                                                            .Where(pc => pc.CustomerId == userId && pc.ProductId == p.Id)
-                                                            .Select(pc => new ProductInCart
-                                                            {
-                                                                Id = pc.Id,
-                                                                Amount = pc.Amount ?? 0
-                                                            })
-                                                            .ToList()
-                                  }).ToListAsync();
+            //var products = await (from c in _context.ProductInCarts
+            //                      join p in _context.Products on c.ProductId equals p.Id
+            //                      where c.CustomerId == userId
+            //                      select new Product
+            //                      {
+            //                          Id = p.Id,
+            //                          Name = p.Name,
+            //                          Price = p.Price,
+            //                          CategoryId = p.CategoryId,
+            //                          Image = p.Image,
+            //                          Description = p.Description,
+            //                          ProductInCarts = _context.ProductInCarts
+            //                                                .Where(pc => pc.CustomerId == userId && pc.ProductId == p.Id)
+            //                                                .Select(pc => new ProductInCart
+            //                                                {
+            //                                                    Id = pc.Id,
+            //                                                    Amount = pc.Amount ?? 0
+            //                                                })
+            //                                                .ToList()
+            //                      }).ToListAsync();
 
-            return products;
+            //return products;
+
+            var currentBag = await _context.ProductInCarts
+                                                 .Where(p => p.CustomerId == userId)
+                                                 .Include(p => p.Product)
+                                                 .ToListAsync();
+            //if (currentBag.Id == id)
+            //    return currentBag;
+            return currentBag;
         }
 
         public async Task<ProductInCart> GetCartById(int id)
@@ -93,7 +101,7 @@ namespace DAL
         {
             try
             {
-                ProductInCart current = await _context.ProductInCarts.FirstOrDefaultAsync(item => item.ProductId == id && item.CustomerId == bag.CustomerId);
+                ProductInCart current = await _context.ProductInCarts.FirstOrDefaultAsync(item => item.Id == id);
                 if (current != null)
                 {
                     current.Amount = bag.Amount;

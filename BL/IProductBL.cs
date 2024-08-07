@@ -6,7 +6,7 @@ namespace BL
     public interface IProductBL
     {
       public  Task<ProductDTO> AddProduct(ProductDTO product);
-      public Task<List<Product>> GetProducts();
+      public Task<List<ProductDTO>> GetProducts();
 
         //public Task<List<Product>> GetProduct(int categoryId);
       public  Task<Product> GetProductById(int id);

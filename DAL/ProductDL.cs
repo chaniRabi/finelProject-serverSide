@@ -81,7 +81,10 @@ namespace DAL
                 {
                     current.Name = product.Name;
                     current.Price = product.Price;
-                    current.Category = product.Category;
+                    current.CategoryId = product.CategoryId;
+                    current.Quantity = product.Quantity;
+                    current.Image = product.Image;
+                    current.Description = product.Description;
 
                     _context.Products.Update(current);
                     await _context.SaveChangesAsync();
@@ -95,6 +98,19 @@ namespace DAL
             {
                 throw ex;
             }
+        }
+
+
+        public async Task UpdateStock(int productId, int quantity)
+        {
+            var product = await _context.Products.SingleOrDefaultAsync(p => p.Id == productId);
+            if (product != null)
+            {
+                product.Quantity = quantity;
+                await _context.SaveChangesAsync();
+            }
+            //void אין צורך להחזיר ערך כאן כי זה פונקצית 
+
         }
     }
 }

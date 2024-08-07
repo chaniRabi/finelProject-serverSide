@@ -22,7 +22,7 @@ namespace API_ShineStock.Controllers
         [HttpGet]
         [Route("getOrders")]
 
-        public async Task<List<Order>> GetOrders()
+        public async Task<List<OrderDTO>> GetOrders()
         {
             var Orders = await _orderBL.GetOrders();
             return Orders;
@@ -42,7 +42,7 @@ namespace API_ShineStock.Controllers
             try
             {
                 OrderDTO isAddOrder = await _orderBL.AddOrder(order);
-                return isAddOrder;
+                return Ok(isAddOrder);
             }
             catch (Exception ex)
             {
@@ -83,5 +83,18 @@ namespace API_ShineStock.Controllers
             }
 
         }
+
+        //[HttpPost("{}")]
+        //public async Task<ActionResult<OrderDTO>> PlaceOrder([FromBody] OrderDTO order)
+        //{
+        //    if (order == null)
+        //    {
+        //        return BadRequest("Invalid order data.");
+        //    }
+        //    await _orderBL.ProcessOrderAsync(order);
+        //    return Ok(order);
+
+
+        //}
     }
 }

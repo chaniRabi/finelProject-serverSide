@@ -32,12 +32,29 @@ namespace API_ShineStock.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
-        [Route("/Status")]
+        [Route("Status")]
         public async Task<List<StatusDTO>> GetStatus()
         {
             var Status = await lookupBL.GetStatus();
             return Status;
+        }
+
+        [HttpPost]
+        [Route("AddContct")]
+        public async Task<ContctDTO> AddContct(ContctDTO contct)
+        {
+            try
+            {
+                var Contct = await lookupBL.AddContct(contct);
+                return Contct;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw ex;
+            }
         }
     }
 }

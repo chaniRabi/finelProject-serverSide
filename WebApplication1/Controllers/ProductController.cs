@@ -24,7 +24,7 @@ namespace API_ShineStock.Controllers
         [HttpGet]
         [Route("getProducts")]
 
-        public async Task<List<Product>> GetProducts()
+        public async Task<List<ProductDTO>> GetProducts()
         {
 
             var Product = await _productBL.GetProducts();
@@ -96,7 +96,7 @@ namespace API_ShineStock.Controllers
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<bool>> RemoveProduct([FromBody] int id)
+        public async Task<ActionResult<bool>> RemoveProduct(int id)
         {
             try
             {

@@ -21,10 +21,11 @@ namespace BL
             _mapper = mapper;
         }
 
-        public async Task<List<Product>> GetProducts()
+        public async Task<List<ProductDTO>> GetProducts()
         {
             List<Product> products = await _productDL.GetProducts();
-            return products;
+            List<ProductDTO> productsDTO = _mapper.Map<List<ProductDTO>>(products);
+            return productsDTO;
         }
         //public async Task<List<Product>> GetProduct(int categoryId)
         //{

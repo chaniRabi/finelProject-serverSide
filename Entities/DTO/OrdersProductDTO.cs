@@ -11,9 +11,9 @@ public partial class OrdersProductDTO
 
     public int OrderId { get; set; }
 
-    public int? Amount { get; set; }
+    public int Amount { get; set; }
 
-    public virtual OrderDTO Order { get; set; } = null!;
+    //public virtual OrderDTO Order { get; set; } = null!;
 
-    public virtual ProductDTO Product { get; set; } = null!;
+    public virtual ProductDTO? Product { get; set; } = null!;
 }

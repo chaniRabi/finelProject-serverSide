@@ -20,7 +20,8 @@ namespace Entities
             CreateMap <Contct, ContctDTO > ();
             CreateMap <Order, OrderDTO > ();
             CreateMap <OrdersProduct, OrdersProductDTO > ();
-            CreateMap <Product, ProductDTO > ();
+            CreateMap<Product, ProductDTO>();
+            //CreateMap <Product, ProductDTO > ().ForMember(dest => dest.Prise, opt => opt.MapFrom(src => src.Price));
             CreateMap <Status, StatusDTO > ();
 
 
@@ -32,6 +33,7 @@ namespace Entities
             CreateMap<OrderDTO, Order>();
             CreateMap<OrdersProductDTO, OrdersProduct>();
             CreateMap<ProductDTO, Product>();
+            //CreateMap<ProductDTO, Product>().ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Prise)); ;
             CreateMap<StatusDTO, Status>();
 
         }
